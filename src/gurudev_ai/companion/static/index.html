@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123d36"><meta name="description" content="GURUDEV.ai — Voice-enabled breeder companion and plant-breeding research workspace">
+<title>GURUDEV.ai · Breeder Companion</title><link rel="stylesheet" href="/static/styles.css"><style>.cloud-privacy{background:#fff1dc;border:1px solid #d2a03b;color:#5e4211;padding:9px 14px;font-size:13px;line-height:1.4;position:relative;z-index:3}</style></head>
+<body><div class="cloud-privacy"><strong>Temporary online research preview:</strong> Uploaded files and field records are processed on a hosted server (NOT on your device). Storage is temporary and may be lost when the free server sleeps or restarts. Use synthetic/test data only. No confidential or unpublished datasets.</div>
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="mark">G</div><div><strong>GURUDEV<span>.ai</span></strong><small>BREEDER INTELLIGENCE</small></div></div>
+ <div class="workspace"><label for="project">CURRENT PROJECT</label><input id="project" value="Rice" maxlength="100" autocomplete="off"><small>Projects keep tasks and field observations separate</small></div>
+ <nav id="nav" aria-label="Main navigation">
+  <button data-page="companion" class="nav-item selected">✦ <span>Breeder companion</span></button>
+  <button data-page="field" class="nav-item">▧ <span>Field book</span></button>
+  <button data-page="tasks" class="nav-item">☑ <span>Breeding tasks</span></button>
+  <button data-page="trial" class="nav-item">⌁ <span>Trial quality check</span></button>
+  <button data-page="parents" class="nav-item">♧ <span>Parent explorer</span></button>
+  <button data-page="gp" class="nav-item">◉ <span>GP Auto-Lab</span></button>
+  <button data-page="campaign" class="nav-item">◎ <span>Breeding campaign engine</span></button>
+  <button data-page="about" class="nav-item">◈ <span>Platform status</span></button>
+ </nav>
+ <div class="sidebar-foot"><span class="online-dot"></span> Local-first research build <small>GURUDEV.ai v0.3.0</small></div>
+</aside>
+<main class="main">
+ <header class="topbar"><span id="crumb">Breeder companion</span><div class="top-right"><span id="connection">Local workspace</span><span class="avatar">G</span></div></header>
+ <div class="pages">
+  <section class="page active" id="page-companion">
+   <div class="hero"><div class="kicker">YOUR AI BREEDING COMPANION</div><h1>What shall we work on <em>today?</em></h1>
+    <p>Talk to GURUDEV about your experiment, crosses, field observations or breeding priorities. Suggestions stay distinct from verified analytical results.</p></div>
+   <div class="quick-grid"><button class="quick" data-prompt="Help me plan a rice GWAS experiment">◉ <b>Design a GWAS</b><span>Scientific workflow</span></button><button class="quick" data-prompt="How can I select complementary parents for grain yield?">♧ <b>Choose parents</b><span>Cross planning</span></button><button class="quick" data-prompt="Show my tasks">☑ <b>My priorities</b><span>Open tasks</span></button></div>
+   <div class="conversation" id="messages" role="log" aria-live="polite"><article class="bubble assistant"><span class="bubble-title">GURUDEV</span><p>Welcome. I can help you organise field work, manage experiments and prepare breeding analyses. Tap the microphone or type your request below.</p></article></div>
+   <div class="suggestion" id="proposal" hidden><span id="proposal-text"></span><div><button class="primary" id="confirm-proposal">Confirm and save task</button><button class="ghost" id="cancel-proposal">Cancel</button></div></div>
+   <div class="composer">
+    <textarea id="question" rows="2" placeholder="Ask GURUDEV about your breeding work..." aria-label="Message to breeder companion"></textarea>
+    <div class="composer-foot"><div class="voice-group"><button id="mic" class="microphone" title="Push to speak" aria-label="Start voice input">🎙</button><select id="language" title="Voice language"><option value="en-IN">English (India)</option><option value="hi-IN">हिन्दी</option><option value="or-IN">ଓଡ଼ିଆ (where supported)</option></select><label class="switch-text"><input type="checkbox" id="speak"> Speak replies</label></div><div class="send-group"><label class="switch-text" title="Requires a separately configured paid API key; sends the question to a cloud AI model"><input type="checkbox" id="cloud"> Cloud AI</label><button class="primary" id="send">Send ↗</button></div></div>
+    <div class="voice-state" id="voice-state" aria-live="polite">Voice recognition availability is checked on this device. Microphone activates only when tapped.</div>
+   </div>
+  </section>
+  <section class="page" id="page-field"><div class="section-header"><span class="kicker">FIELD COMPANION</span><h1>Field book</h1><p>Capture crop observations with traceable identifiers. Records are stored temporarily on the hosted server and can disappear after server restarts. Do not enter confidential information.</p></div>
+   <div class="panel"><h2>New observation</h2><form id="field-form" class="form-grid"><label>Genotype or plot identifier<input name="genotype" required placeholder="CR Dhan 807"></label><label>Trait<input name="trait" required placeholder="Plant height (cm)"></label><label>Recorded value<input name="value" required placeholder="102"></label><label>Environment / location<input name="environment" placeholder="Cuttack · Kharif 2026"></label><label class="full">Notes<textarea name="notes" rows="2" placeholder="Phenological stage, conditions, observer... "></textarea></label><button class="primary" type="submit">Save observation</button></form></div><div class="panel"><h2>Recent field records</h2><div id="observation-list" class="stack"></div></div>
+  </section>
+  <section class="page" id="page-tasks"><div class="section-header"><span class="kicker">WORK MANAGEMENT</span><h1>Breeding tasks</h1><p>Plan crosses, trial visits, seed processing and scientific analysis. Mark work complete only after it has actually been completed.</p></div>
+   <div class="panel"><form id="task-form" class="form-grid"><label class="wide">New task<input name="title" required maxlength="300" placeholder="Sow DSR experiment nursery"></label><label>Target date<input name="due_date" type="date"></label><button class="primary" type="submit">Add task</button></form></div><div class="panel"><h2>Task register</h2><div id="task-list" class="stack"></div></div></section>
+  <section class="page" id="page-trial"><div class="section-header"><span class="kicker">RESEARCH DATA QUALITY</span><h1>Trial quality check</h1><p>Upload a phenotype trial CSV to flag missing traits, plot identifier reuse and replication details. Structural validation only; not ANOVA.</p></div><div class="panel"><label class="upload">Upload CSV with sample_id, rep, plot_id and traits<input type="file" id="trial-file" accept=".csv,text/csv"></label><button class="primary" id="trial-run">Inspect trial</button></div><div id="trial-result" class="panel result" hidden></div></section>
+  <section class="page" id="page-parents"><div class="section-header"><span class="kicker">EXPLORATORY BREEDING DECISIONS</span><h1>Parent explorer</h1><p>Rank observed candidate lines using a weighted trait index. Cross suggestions reflect trait profiles, not predicted genetic gain or heterosis.</p></div><div class="panel"><label class="upload">Upload a parent CSV: sample_id and numeric trait columns<input type="file" id="parent-file" accept=".csv,text/csv"></label><button id="read-traits" class="outline">1. Identify trait columns</button><div id="trait-builder"></div><button class="primary" id="rank-parents" disabled>2. Calculate exploratory rankings</button></div><div id="parent-result" class="panel result" hidden></div></section>
+  <section class="page" id="page-gp"><div class="section-header"><span class="kicker">GURUDEV AGENTIC ANALYSIS</span><h1>Genomic Prediction Auto-Lab</h1><p>Run the validated baseline workflow on a numeric-marker genotype matrix and phenotype CSV. Nested cross-validation, automatic tuning, audit trails and output checking are executed without manual coding.</p></div>
+  <div class="panel"><form id="gp-form" class="form-grid"><label>Genotype CSV (sample_id, SNP columns)<input type="file" name="genotype" accept=".csv,text/csv" required></label><label>Phenotype CSV (sample_id, trait)<input type="file" name="phenotype" accept=".csv,text/csv" required></label><label>Trait column name<input name="trait" required placeholder="GrainYield"></label><label>Family/group column (optional)<input name="group_column" placeholder="family"></label><button class="primary" id="gp-run" type="submit">Run and verify GP analysis</button></form><p><small>Exploratory numeric-marker pipeline using Ridge and ElasticNet. Supports at least 16 overlapping samples. More complex G×E or genomic breeding-value models are not yet included. Avoid running untrusted or sensitive datasets on public servers.</small></p></div>
+  <div id="gp-result" class="panel result" hidden></div><div class="panel"><h2>Recent analysis jobs</h2><div id="gp-jobs" class="stack"></div></div></section>
+  <section class="page" id="page-campaign"><div class="section-header"><span class="kicker">SCIENTIFIC BREEDING INTELLIGENCE</span><h1>Evidence-gated breeding campaign</h1><p>GURUDEV evaluates a diploid SNP matrix with GBLUP, nested validation, and a train-fold-mean baseline. It will block candidate cross proposals if the predictive-skill gate fails. Every shortlist requires independent breeder approval.</p></div>
+    <div class="panel"><h2>Start a genomic breeding campaign</h2><form id="campaign-form" class="form-grid">
+      <label>Genotypes (CSV; sample_id + SNP dosage 0/1/2)<input type="file" name="genotype" accept=".csv,text/csv" required></label>
+      <label>Phenotypes (CSV; sample_id + adjusted trait values)<input type="file" name="phenotype" accept=".csv,text/csv" required></label>
+      <label>Trait name<input name="trait" placeholder="grain_yield" required></label>
+      <label>Validation group: family/site/year (optional)<input name="group_column" placeholder="family"></label>
+      <label>Selection goal<select name="direction"><option value="max">Higher trait value</option><option value="min">Lower trait value</option></select></label>
+      <div><button class="primary" id="campaign-run" type="submit">Run scientific campaign</button></div>
+    </form><p><small>Use breeding data with suitable experimental adjustments and allele coding. All analyses run on the hosted server; files are uploaded for processing. Use non-sensitive trial data only. Random CV on related germplasm is not sufficient for deployment.</small></p></div>
+    <div id="campaign-result" class="panel result" hidden></div>
+    <div class="panel"><h2>Independent external validation (frozen model)</h2>
+      <p>Evaluate a previously trained campaign on genotypes and phenotypes from a genuinely independent population, year or location. No fitting or model selection is permitted during this step.</p>
+      <form id="external-form" class="form-grid">
+        <label>Campaign ID<input name="job_id" id="external-job-id" required placeholder="Paste completed campaign ID"></label>
+        <label>Trait column<input name="trait" id="external-trait" required placeholder="grain_yield"></label>
+        <label>Independent genotype CSV<input name="genotype" type="file" required accept=".csv,text/csv"></label>
+        <label>Independent phenotype CSV<input name="phenotype" type="file" required accept=".csv,text/csv"></label>
+        <button class="primary" type="submit" id="external-run">Evaluate frozen model</button>
+      </form><div id="external-result" class="result" hidden></div>
+    </div>
+   </section>
+  <section class="page" id="page-about"><div class="section-header"><span class="kicker">TRANSPARENCY & VALIDATION</span><h1>Platform status</h1><p>What is implemented, what is only exploratory, and what still needs scientific validation.</p></div><div class="stats"><div class="stat"><b id="stat-tasks">0</b><span>Open tasks</span></div><div class="stat"><b id="stat-observations">0</b><span>Field observations</span></div><div class="stat"><b>v0.3</b><span>Scientific development release</span></div></div><div class="panel"><h2>Module readiness</h2><div id="modules" class="stack"></div></div><div class="panel"><h2>Important limitations</h2><p>This is a password-protected temporary cloud research preview, not an institutional production service. There is only basic password authentication; no multi-user authorization or data isolation, field-sensor connection, offline speech engine, LLM self-training or unsupervised code auto-repair. Browser recognition may send audio to the browser vendor. A GBLUP campaign and model-skill gate are available, but neither has been prospectively validated on independent breeding populations. Legacy R/Shiny modules are not integrated.</p><p>Before institutional deployment, add authentication, privacy safeguards, encrypted backups, access control, controlled execution, and real-data benchmarks.</p></div></section>
+ </div>
+ <footer>GURUDEV.ai · Research-grade transparency, human-approved scientific decisions.</footer>
+</main></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="/static/app.js" defer></script>
+<script>
+window.addEventListener('load', () => {
+  const button=document.createElement('button');
+  button.textContent='Export temporary field-book backup';
+  button.type='button';
+  button.style.cssText='position:fixed;bottom:14px;right:14px;z-index:999;background:#fff;border:2px solid #777;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:12px';
+  button.addEventListener('click', async () => {
+    try {
+      const response=await fetch('/api/backup?project=Rice',{credentials:'same-origin'});
+      if(!response.ok) throw new Error('Backup export failed');
+      const blob=new Blob([await response.text()],{type:'application/json'});
+      const url=URL.createObjectURL(blob);const link=document.createElement('a');
+      link.href=url;link.download='GURUDEV_ai_trial_backup.json';link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }catch(error){alert(error.message)}
+  });
+  document.body.appendChild(button);
+});
+</script></body></html>
