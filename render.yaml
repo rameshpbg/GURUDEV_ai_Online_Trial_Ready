@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: gurudev-ai-private-preview
+    runtime: python
+    plan: free
+    buildCommand: pip install -e .
+    startCommand: uvicorn cloud_server:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: GURUDEV_ONLINE_USER
+        sync: false
+      - key: GURUDEV_ONLINE_PASSWORD
+        sync: false
+      - key: GURUDEV_COMPANION_DB
+        value: /tmp/gurudev_companion.sqlite3
+      - key: GURUDEV_CAMPAIGNS
+        value: /tmp/gurudev_campaigns
+      - key: GURUDEV_RUNS
+        value: /tmp/gurudev_runs
