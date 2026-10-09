@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gurudev-ai"
-version = "0.3.0"
+version = "0.4.1"
 description = "GURUDEV.ai breeder companion with voice interface and auditable scientific workflows"
 requires-python = ">=3.10"
-dependencies = ["numpy>=1.24", "pandas>=2.0", "scikit-learn>=1.3", "joblib>=1.2", "fastapi>=0.110", "uvicorn>=0.27", "python-multipart>=0.0.9", "matplotlib>=3.6"]
+dependencies = ["numpy>=1.24", "pandas>=2.0", "scikit-learn>=1.3", "joblib>=1.2", "fastapi>=0.110", "uvicorn>=0.27", "python-multipart>=0.0.9", "matplotlib>=3.6", "openpyxl>=3.1.2", "scipy>=1.10"]
 
 [project.optional-dependencies]
 ui = ["streamlit>=1.35"]

@@ -1,120 +1,92 @@
-# GURUDEV.ai v0.3.0 — Evidence-Driven Agentic Breeder
+# GURUDEV.ai v0.4.1 — Scientific Engine and Breeder Research Agent
 
-**Serious scientific development build — not a finished world-class product and not validated for breeding deployment.**
+**Research development release. Not production-certified, and not a complete plant breeding or biotechnology analysis suite.**
 
-GURUDEV.ai combines the existing voice-capable breeder companion with a new scientific breeding engine:
+GURUDEV.ai is a crop-independent, modular scientific software effort. Its purpose is to grow into an agentic research environment that unifies experimental design, quantitative genetics, genetic diversity, mapping, genomic prediction, breeding simulations, field phenomics, molecular biotechnology, multi-omics, and AI/ML/DL. **Only the explicitly implemented methods below are executable in this release.**
 
-- Input validation for matched diploid biallelic SNP genotypes (`0/1/2`, or `AA/AB/BB`) and adjusted trait values, including unphenotyped candidates.
-- **GBLUP** with VanRaden-style genomic relationship kernel, training-only allele-frequency calculation, missing-marker imputation, SNP missingness/MAF QC, kernel regularization tuning and nested random or group cross-validation.
-- Evaluation against fold-specific training-mean prediction, **automatic hold of cross proposals** when predictive skill is insufficient, and deliberately labelled exploratory cross shortlist when sufficient internal predictive skill exists.
-- A **frozen numerical model** (`.npz`; no pickle) for no-refit independent-population evaluation. Overlap with training sample IDs is rejected; external performance compared with the fixed training-mean baseline.
-- Reproducible audit folder with input hashes, model hyperparameters, fold assignments, out-of-fold and candidate predictions, conditional cross shortlist, 350-DPI PNG/vector PDF graphics and human review gate.
-- An **optional cloud AI research coordinator** using the OpenAI Agents SDK. Its tools are allowlisted: inspect data, run one scientifically gated campaign and review evidence; it has no shell or breeding decision approval access. Requires an API key and independent end-to-end credentialed testing.
-- Existing local breeder companion: voice dictation/output (browser dependent), field book, tasks, trial structural QC, exploratory phenotypic parent index, baseline GP Auto-Lab.
+## Working functions (local technical tests)
 
-## What GURUDEV.ai is NOT yet
+| Area | Currently executable | Explicit limits |
+|---|---|---|
+| File import | CSV, TSV/TXT, XLSX, diploid biallelic HapMap, restricted VCF GT/.vcf.gz; sample/marker checks, import preview, normalization | Not `.xls`, multi-ALT/polyploid VCF, PLINK BGEN/PGEN, FASTQ/BAM, arbitrary biological schema inference |
+| Diploid genetic diversity | PCA, Ho/He, PIC, Weir–Cockerham theta with locus-bootstrap interval and high-resolution PCA/FST figures | Not full FIT/FIS, AMOVA, multi-allelic or polyploid inference; source R Diversity remains unintegrated |
+| Trial ANOVA | Strictly balanced single-trait CRD, RCBD and multi-environment RCBD including G×E, method-of-moments entry mean H², experimental CV, unadjusted LSD and residual Shapiro/Levene screens | Does not perform REML, missing-plot imputation, BLUE/BLUP, alpha-lattice, split plot or spatial correction |
+| Association mapping | PC-adjusted GLM; null REML kinship LMM (EMMAX-like approximation), SNP call-rate/MAF filters, BH-FDR/Bonferroni, publication-resolution association-index/QQ figures, audit folders | No LOCO, allele orientation harmonization, fine mapping, validated FarmCPU/BLINK/mrMLM or genome annotation |
+| Genomic prediction | Ridge/ElasticNet nested CV; GBLUP with nested/group CV and frozen independent population evaluation | Real crop/family/year external validation incomplete; no Bayesian, deep learning or multi-trait engine yet |
+| Crossing | Exploratory midparent and marker relationship metrics, review gates on predictive skill | Not predicted recombination outcomes or validated genetic gain; no automatic crossing approval |
+| Research agent | Natural language intent routing, data checks, allowlisted execution of ANOVA/GWAS/GBLUP/population diversity, automatic artefact logging and stop-for-review | Deterministic goal router; not a permanently running autonomous LLM or unrestricted automatic debugger |
+| Breeder companion | Field notes, tasks, voice interaction in supported browsers, basic conversational workflows | Offline fallback is limited; voice speech recognition depends on browser/vendor |
+| Knowledge library | 21 curated, provenance-linked learning resources and search | Not a comprehensive verified literature search index; links/content need periodic review |
 
-This is **not** automatically superior to existing scientific software, not a validated multi-crop production service, not a native HapMap/VCF analysis pipeline, and not an auto-learning LLM. No authentication, encrypted at-rest project storage, production job queue, CI/CD deployment, real-time laboratory actuation, unrestricted self-patching, prospective multi-environment validation, or independent IRRI/ICAR benchmark has been implemented. Do not expose the included API to the public internet.
+**Method readiness matters.** The Scientific Analysis Studio shows implemented/technical-test versus planned methods. An item in the catalogue is not a claim that its statistical engine has been implemented.
 
-Legacy GURUDEV Diversity, GWAS, E-Design and other R packages are **not integrated** because their authoritative source code has not been supplied to this build.
+## Start without an LLM subscription
 
-## Installation
+### Local execution
 
-1. Download and extract ZIP. Requires **Python 3.10+**, an internet connection once for dependencies, and Windows/macOS/Linux.
-2. Windows: double-click `START_GURUDEV_WINDOWS.bat`; browser local URL is **http://127.0.0.1:8502**.
-3. Or terminal:
+- Windows: extract the ZIP and double-click `START_GURUDEV_WINDOWS.bat` (Python 3.10+ required).
+- Linux/macOS: `sh START_GURUDEV_LINUX_MAC.sh`.
+- Browser URL: `http://127.0.0.1:8502`.
+
+Alternatively:
 
 ```bash
-python -m venv .venv
-# Linux/macOS: source .venv/bin/activate
-# Windows PowerShell: .venv\Scripts\Activate.ps1
 python -m pip install -e '.[dev]'
 python -m gurudev_ai.companion.server
 ```
 
-Voice input is push-to-talk in supported browser environments. It may require device permissions and browser processing of audio. Normal typing remains available.
+The source package also contains `cloud_server.py` and `render.yaml` for authenticated temporary Render hosting, **not** an institutional secure SaaS environment.
 
-## Scientifically auditable breeding campaign — offline, no API key
-
-```bash
-python -m gurudev_ai campaign \
-  --genotype examples/demo_genotype.csv \
-  --phenotype examples/demo_phenotype.csv \
-  --trait grain_yield --group family \
-  --direction max --output campaign_runs
-```
-
-Run results are written under `campaign_runs/<32-character-id>/` with `manifest.json`, `events.jsonl`, `scientific_report.md`, `candidate_predictions.csv`, `out_of_fold_predictions.csv`, `trained_gblup_model.npz`, `cross_shortlist.json` and figures. **Included example data are synthetic and only establish functionality.**
-
-Random individual CV can overestimate generalization in related germplasm; grouped CV by family/location/year is advised when scientifically appropriate. External evaluation is a separate, stronger gate. Real-world performance and genotypic accuracy remain unproven until independently benchmarked.
-
-## Freeze and independently validate the trained model
-
-```bash
-python -m gurudev_ai external-validate \
-  --id <RUN_ID> --output campaign_runs \
-  --genotype external_genotypes.csv \
-  --phenotype external_phenotypes.csv \
-  --trait grain_yield
-```
-
-The independent dataset needs **different sample IDs** and the **same retained SNP IDs, orientation, diploid dosage convention and trait units**. The code does not retrain, re-select SNPs or change allele frequencies. This does not independently establish that an external site/year is truly prospective: metadata must be reviewed by the scientist.
-
-## Human review
-
-Crossing is NEVER performed automatically. To acknowledge review of a shortlist (not authorize field operations), use:
-
-```bash
-python -m gurudev_ai approve-campaign --id <RUN_ID> \
-  --output campaign_runs --reviewer "Breeder Reviewer" \
-  --justification "Reviewed with field and pedigree information; validation limitations understood"
-```
-
-This approval applies only to **review of exploratory cross candidates**, never cultivar release, laboratory protocols or field actuation.
-
-## Optional AI tool-using breeder coordinator
-
-```bash
-python -m pip install -e '.[agentic]'
-# Set OPENAI_API_KEY privately in the process environment; do not put secrets in source code or chat.
-python -m gurudev_ai agent-run \
-  'Inspect these genomic data, evaluate yield predictability, and explain if a cross shortlist is defensible' \
-  --genotype examples/demo_genotype.csv \
-  --phenotype examples/demo_phenotype.csv \
-  --trait grain_yield --group family \
-  --output campaign_runs
-```
-
-In this mode, the cloud service receives the natural-language goal and **structured QC/evaluation summaries**, not the raw genotype CSV, via the declared tools. Calls may incur charges. The tool loop has not yet been live API-tested, because no authorized API key was available. Tracing is disabled by default in this integration to avoid exporting sensitive research context.
-
-## Scientific output interpretation
-
-- `predicted_oof` / `out_of_fold_predictions.csv`: unbiased-within-chosen-CV-scheme holdout predictions, not external prospective evidence.
-- `candidate_predictions.csv`: **in-sample fitted** model predictions for phenotyped entries, model-based predictions for unphenotyped entries. These are different evidence classes.
-- `cross_shortlist.json`: additive midparent-index proxies, genomic relationship and marker-level estimated F1 heterozygosity. **Not** predicted F1 field performance, recombination variance or heterosis.
-- `SCIENTIFIC_HOLD`: failed basic model-skill gate or subsequently failed external check; no crosses should be promoted.
-- `AWAITING_HUMAN_REVIEW`: internal gate passed; hypothetical shortlist requires scientific evaluation.
-- `REVIEWED_SHORTLIST`: explicit local review acknowledgement; not field crossing authority.
-
-## Tests
+### Test the release
 
 ```bash
 python -m pip install -e '.[dev]'
-pytest -q
-node --check src/gurudev_ai/companion/static/app.js   # if Node is available
+python -m pytest -q
 ```
 
-All 34 included tests were run on the development environment for this version (separate real-sample validation not performed). Tests cover source compatibility, input rejection, CV grouping and leakage avoidance, positive/negative skill gates, frozen-model validation without refitting, tamper detection of audit records, API endpoints and local workflows.
+Input templates are in `examples/`. For an immediately runnable balanced ANOVA, use `demo_field_trial_complete.csv`; `demo_field_trial.csv` intentionally has a missing yield for the QC/error demonstration. For genetic diversity, upload `demo_genotype.csv` together with `demo_population_metadata.csv`. All sample datasets are **synthetic** and must not be represented as real field results.
 
-## Scientific/engineering priorities
+## Operating the new Research Studio
 
-1. Obtain and freeze **authoritative real rice panel + trial datasets** with experimental layouts, SNP IDs, population structure, locations, seasons and phenotype reliability. Perform external blind benchmarking against rrBLUP/BGLR/GBLUP/R models.
-2. Capture MIAPPE-compliant metadata and support BrAPI 2.1 data connections, genomic VCF/HapMap and multi-environment trial analysis.
-3. Add software-level authorization, encrypted storage, immutable signed logs, user roles, multiple projects and a durable job queue with retries/cancellation.
-4. Connect legacy GURUDEV scientific R packages with independent numerical reference tests and automated regression checks.
-5. Extend the breeder coordinator to documented multi-trait selection objectives, expected progeny value uncertainty, mating design/OCS, G×E, phenomics, multi-omics and real field data collection.
-6. Validate voice on target devices and languages. Build support for low-connectivity Android deployment with privacy safeguards.
+1. Open **Data Import Lab** to inspect formats, sample IDs, marker orientation and transformations before analysis.
+2. Open **Genetic Diversity Lab** to provide diploid SNP genotypes and explicitly declared population groups for PCA, Ho/He, PIC and WC84 theta.
+3. Open **Scientific Analysis Studio**. Choose **Scientific Task Agent** to enter a research assignment, identify required data, and then explicitly execute a single supported tool. Unsupported/multimodule requests stop and request clarification.
+4. For replicated trials, choose **CRD/RCBD ANOVA**, upload a row-per-plot table with `sample_id`, `rep`, trait and optional `environment`. Unbalanced trials are rejected.
+5. For GWAS, upload **sample-by-SNP diploid 0/1/2** genotypes (or a declared HapMap/VCF), a one-row-per-individual **experiment-adjusted** phenotype table, choose a trait, PCs, model and QC limits. Results include raw p-values, BH q-values, Bonferroni p-values, estimated effects, high-resolution PNG/PDF figures and a report. Scientific release is blocked.
+6. Open **Knowledge Library** for key formulas/interpretation cautions and primary references.
 
-See `docs/SCIENTIFIC_ACCEPTANCE_v0_3.md` and `SECURITY.md` for acceptance criteria and risks.
+**Avoid confidential breeding data in the Render Free trial.** Uploaded material, observations and results are processed on that server, whose disk and SQLite database are temporary. Free CPU/RAM and upload limits cannot accommodate large 44K SNP chips or production workloads reliably. Separate storage, job queue and research computing must be engineered before production.
 
-**© Scientific development project. Product name GURUDEV.ai used provisionally; intellectual property, branding and domain verification pending.**
+## Source code layout
+
+```
+src/gurudev_ai/io/importer.py                 # explicit genotype/table formats
+src/gurudev_ai/research_core/quantitative.py   # balanced CRD/RCBD
+src/gurudev_ai/research_core/diversity.py      # diploid diversity, PCA and WC84 theta
+src/gurudev_ai/research_core/diversity_pipeline.py # QA, artifacts, figures
+src/gurudev_ai/research_core/gwas.py           # PC GLM / approximate kinship LMM
+src/gurudev_ai/research_core/gwas_pipeline.py  # artifact, hash, report, audit
+src/gurudev_ai/research_core/gwas_figures.py   # 350-DPI plots and vector PDF
+src/gurudev_ai/research_core/agent.py          # goal-to-allowlisted-tool router
+src/gurudev_ai/research_core/knowledge.py      # curated knowledge
+src/gurudev_ai/research_core/catalog.py        # scientific capability maturity
+src/gurudev_ai/companion/server.py             # app / APIs
+cloud_server.py                                # temporary HTTP Basic authentication
+```
+
+## Continuous integration
+
+The repository includes `.github/workflows/quality.yml`: it runs Python 3.11 and 3.12 tests, checks browser JavaScript syntax, and compiles Python sources on each pull request and push to `main`. **The workflow has not been run on GitHub because repository write access was unavailable in this session.** CI passage must not be mistaken for agronomic validation.
+
+## Validation and provenance
+
+- Synthetic null-marker association p-value calibration test; causal-marker positive control.
+- Independent `scipy.stats.linregress` and `statsmodels.GLS` marker coefficient/p-value comparisons.
+- RCBD ANOVA independently checked against `statsmodels` OLS Type-II ANOVA.
+- Import regression tests include malformed, multiallelic and ploidy-incompatible VCF rejection, duplicate IDs, invalid genotype dosages, split-trial balance, missingness, and hosted API uploads.
+- Browser navigation and JS syntax checked; **browser interaction tests use mocked responses, not a real Render launch or microphone**.
+- Every GWAS run stores data hashes, parameters, complete marker statistics, 350-DPI/vector figures, and a scientific-review gate.
+
+No independent real-crop validation, across-population field trial, prospective breeding-gain study, commercial security audit or benchmark against full GAPIT/ASReml workflows has been performed. Never claim otherwise.
+
+**Guidance:** `docs/GURUDEV_AI_MASTER_SPEC_v1.md`, `docs/SCIENTIFIC_ACCEPTANCE_v0_3.md`, `docs/IMPORT_CONTRACT.md`, `SECURITY.md`, `README_CLOUD.md`, and `STATUS.md`.

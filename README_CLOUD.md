@@ -1,6 +1,6 @@
 # GURUDEV.ai — Temporary Online Trial Deployment
 
-This is the real GURUDEV.ai v0.3 scientific codebase and browser voice-companion UI, adapted for password-protected **temporary** cloud hosting. It is *not* a completed research-grade SaaS. No dummy model has been substituted. The numerical science remains the v0.3 engine.
+This is the real GURUDEV.ai v0.4.1 scientific research-development codebase and browser voice-companion UI, adapted for password-protected **temporary** cloud hosting. It is *not* a completed research-grade SaaS. No dummy model has been substituted. The numerical science extends the original v0.3 GP engine with technical-test CRD/RCBD and PC-GLM/kinship-LMM association methods; independent crop validation remains outstanding.
 
 ## Deploy without installing Python on your computer
 
@@ -18,7 +18,11 @@ This is the real GURUDEV.ai v0.3 scientific codebase and browser voice-companion
 - Only single-user Basic authentication; not a multi-user access-control system. No encrypted-at-rest data repository, persistent storage or research-institution security approval.
 - No working cloud AI without separately provisioned credentials. The offline science and limited companion replies still operate.
 - If the cloud server exceeds CPU/RAM/time limits, numerical analyses can fail. Use small non-sensitive data to verify functionality.
-- GURUDEV Diversity/GWAS/E-Design R packages are not yet integrated. This remains a development release, NOT a fully autonomous agent.
+- Legacy GURUDEV Diversity/GWAS/E-Design R packages are not yet integrated; the new native GWAS GLM/LMM is a separate, limited technical implementation. This remains a development release, NOT a fully autonomous agent.
 - For long-term protected operation, upgrade to persistent managed storage, real identity and permissions, background job processing and end-to-end security verification.
 
 **No live URL exists until the repository is uploaded and a hosting deployment succeeds.**
+
+## Upgrade an existing Render service
+
+For a running v0.3 service, preserve its service URL and existing credential values. Upload **the extracted v0.4 source tree** at the same repository root (do not upload only the ZIP). Confirm `src/gurudev_ai`, `cloud_server.py`, and `pyproject.toml` are present. Render build command: `pip install -e .`; start: `uvicorn cloud_server:app --host 0.0.0.0 --port $PORT --workers 1`; root directory blank when files live at repo root. Keep `GURUDEV_ONLINE_USER` and `GURUDEV_ONLINE_PASSWORD` ONLY in Render environment variables. Set `GURUDEV_RESEARCH_JOBS=/tmp/gurudev_research_jobs` for this temporary host. Use a protected staging branch/deployment first; do not overwrite a successful site without acceptance testing. After the deployment is Live, verify the `/health`, authenticated `/api/status`, `/api/research/capabilities`, and import preview endpoints. Testing uploads with synthetic files only.

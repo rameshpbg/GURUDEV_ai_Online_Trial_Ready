@@ -8,3 +8,6 @@ __pycache__/
 .venv/
 local_runs/
 gurudev_campaigns/
+gurudev_research_jobs/
+gurudev_runs/
+*.env

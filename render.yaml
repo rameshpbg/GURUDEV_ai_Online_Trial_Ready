@@ -19,3 +19,5 @@ services:
         value: /tmp/gurudev_campaigns
       - key: GURUDEV_RUNS
         value: /tmp/gurudev_runs
+      - key: GURUDEV_RESEARCH_JOBS
+        value: /tmp/gurudev_research_jobs
